@@ -10,25 +10,10 @@ const url = require('url')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-let mainWindows2
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 240, height: 180, frame: false})
-  mainWindows2 = new BrowserWindow({width: 240, height: 180, frame: false});
-
-  // and load the index.html of the app.
-  mainWindows2.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
-  mainWindows2.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -73,3 +58,20 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+
+
+const {Menu, Tray} = require('electron')
+
+let tray = null
+app.on('ready', () => {
+  tray = new Tray('icon.png')
+  const contextMenu = Menu.buildFromTemplate([
+    {label: 'Item1', type: 'radio'},
+    {label: 'Item2', type: 'radio'},
+    {label: 'Item3', type: 'radio', checked: true},
+    {label: 'Item4', type: 'radio'}
+  ])
+  tray.setToolTip('This is my application.')
+  tray.setContextMenu(contextMenu)
+})
