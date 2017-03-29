@@ -1,0 +1,86 @@
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+}
+
+html,body {
+    height: 100%;
+    margin: 0;
+}
+
+/* box */
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.box .row.note-header {
+  flex: 0 1 1rem;
+}
+
+.box .row.note-title {
+  flex: 0 1 auto;
+}
+
+.box .row.note-body {
+  flex: 1 1 auto;
+}
+
+
+.note-header-background {
+    background-color: orange;
+}
+.note-header {
+    height: 1.5rem;
+    user-select: none;  
+    /*border: 4px dashed red;*/
+}
+
+.note-title {
+    margin: 4px;
+    position: relative;
+    /*outline: 4px dashed blue;    */
+}
+
+.note-title input {
+    border: 0;
+    padding: .5rem;
+    width: 100%;
+    font-size: large;
+}
+
+.note-body {
+    position: relative;
+    margin: 0 .5rem;
+    /*border: 4px dashed green;*/
+}
+
+#txtContent {
+    position: absolute;
+    right: 0; left: 0; top: 0; bottom: 0;
+
+    font-size: 1rem;
+}
+
+#txtContent:focus {
+    outline: 1px dashed lightgray;
+}
+
+#btnNew {
+    float: left; 
+    border: 0;   
+}
+
+#btnClose {
+    float: right;
+    border: 0;
+}
+
+#btnNew, #btnClose {
+    background-color: transparent;
+}
+
+#btnNew:hover, #btnClose:hover {
+    background-color: darkorange;
+}

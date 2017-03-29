@@ -3,9 +3,26 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
+
+    <link rel="stylesheet" href="index.css">
+
   </head>
   <body style="-webkit-app-region: drag">
-    <h1>Hello World!</h1>
-    Organize your notes
+    <div class="box">
+
+        <div class="row note-header note-header-background">
+          <button id="btnNew">+</button>
+          <button id="btnClose">X</button>
+        </div>
+
+        <div class="row note-title">
+          <input id="txtTitle" class="note-title-text" type="text" placeholder="[Enter Title]" autofocus>
+        </div>
+
+        <div class="row note-body">
+          <div id="txtContent" contenteditable="true"></div>
+        </div>
+    </div>
+
   </body>
 </html>
