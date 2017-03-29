@@ -1,6 +1,7 @@
+
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-sizing: border-box;
+    box-sizing: border-box; /* default box model */
 }
 
 /* basic elements */
@@ -17,10 +18,6 @@ input {
     font-size: 1rem;
     font-weight: bold;
     background-color: transparent;
-}
-
-input:focus {
-    font-weight: normal;
 }
 
 /* flexbox display */
@@ -76,10 +73,25 @@ input:focus {
     outline: 0;
 }
 
+/* Organize the buttons in the header */
+.box .note-header-focus {
+  display: flex;
+  flex-flow: row;
+  width: 100%;
+}
+
+.box .note-header-focus button {
+  flex: 0 1 auto;
+}
+.box .note-header-focus .note-header-drag {
+  flex: 1 1 auto; 
+  -webkit-app-region: drag; /* .note-header-drag cannot overlap buttons */
+}
+
 /* elements */
 
 #btnNew {
-    float: left; 
+    /*float: left; */
     border: 0;  
     background-color: transparent; 
 }
@@ -91,7 +103,7 @@ input:focus {
 }
 
 #btnClose {
-    float: right;
+    /*float: right;*/
     border: 0;
     background-color: transparent;
 }
@@ -102,6 +114,7 @@ input:focus {
     line-height: 2rem;
 }
 
+/* Colors */
 #btnNew:hover, #btnClose:hover {
     background-color: darkorange;
 }
@@ -114,16 +127,15 @@ input:focus {
     background-color: rgb(255,250,230);
 }
 
-.note-header-drag2 {
-    /*background-color: rgba(10,10,10);*/
-    background-color: green;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    -webkit-app-region: drag;
+.note-header-focus {
+    background-color: rgba(180,180,120,.9);
 }
 
-.note-header-focus {
+
+.show-header {
     visibility: visible;
+}
+
+.hide-header {
+    visibility: hidden;
 }
