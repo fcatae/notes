@@ -60,18 +60,45 @@ app.on('activate', function () {
 // code. You can also put them in separate files and require them here.
 
 
+// const {Menu, Tray} = require('electron')
 
-const {Menu, Tray} = require('electron')
+// let tray = null
+// app.on('ready', () => {
+//   tray = new Tray('icon.png')
+//   const contextMenu = Menu.buildFromTemplate([
+//     {label: 'Item1', type: 'radio'},
+//     {label: 'Item2', type: 'radio'},
+//     {label: 'Item3', type: 'radio', checked: true},
+//     {label: 'Item4', type: 'radio'}
+//   ])
+//   tray.setToolTip('This is my application.')
+//   tray.setContextMenu(contextMenu)
+// })
 
-let tray = null
-app.on('ready', () => {
-  tray = new Tray('icon.png')
-  const contextMenu = Menu.buildFromTemplate([
-    {label: 'Item1', type: 'radio'},
-    {label: 'Item2', type: 'radio'},
-    {label: 'Item3', type: 'radio', checked: true},
-    {label: 'Item4', type: 'radio'}
-  ])
-  tray.setToolTip('This is my application.')
-  tray.setContextMenu(contextMenu)
+
+// In main process.
+const {ipcMain} = require('electron')
+
+ipcMain.on('organizer.new', (event, arg) => {
+
+    console.log('Creating new window')  // prints "ping"
+    event.returnValue = 'pong'
+
+    let mainWindow = createWindow();
+
+    function createWindow() {
+      let win = new BrowserWindow({width: 240, height: 180, frame: false})
+
+      win.loadURL(url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file:',
+        slashes: true
+      }));
+
+      win.on('closed', function () {
+        win = null
+      });
+    }
+
+
 })
