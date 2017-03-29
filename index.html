@@ -10,10 +10,11 @@
   <body>
     <div class="box">
 
-        <div class="row note-header note-header-background" style="-webkit-app-region: drag">
+        <div class="row note-header note-header-background">
+          <div class="note-header-drag"></div>
           <div class="note-header-focus">
-              <span id="btnNew"></span>
-              <span id="btnClose"></span>
+              <button id="btnNew" onclick="alert(1)"></button>
+              <button id="btnClose"  onclick="alert(2)"></button>
           </div>
         </div>
 

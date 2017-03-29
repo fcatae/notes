@@ -7,15 +7,20 @@
 
 html,body {
     height: 100%;
-    margin: 0;    
+    margin: 0;
 }
 
 input {
     border: 0;
-    padding: .5rem;
+    padding: .3rem;
     width: 100%;
-    font-size: large;
+    font-size: 1rem;
+    font-weight: bold;
     background-color: transparent;
+}
+
+input:focus {
+    font-weight: normal;
 }
 
 /* flexbox display */
@@ -41,7 +46,8 @@ input {
 
 /* sections */
 .note-header {
-    user-select: none;  
+    position: relative;
+    user-select: none;
     /*border: 4px dashed red;*/
 }
 
@@ -50,8 +56,9 @@ input {
 }
 
 .note-title {
-    margin: 4px;
     position: relative;
+    user-select: none;
+    margin: 4px;
     /*outline: 4px dashed blue;    */
 }
 
@@ -107,6 +114,16 @@ input:focus {
     background-color: rgb(255,250,230);
 }
 
+.note-header-drag2 {
+    /*background-color: rgba(10,10,10);*/
+    background-color: green;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    -webkit-app-region: drag;
+}
+
 .note-header-focus {
-    visibility: hidden;
+    visibility: visible;
 }
