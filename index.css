@@ -7,7 +7,7 @@
 
 html,body {
     height: 100%;
-    margin: 0;
+    margin: 0;    
 }
 
 input {
@@ -15,6 +15,7 @@ input {
     padding: .5rem;
     width: 100%;
     font-size: large;
+    background-color: transparent;
 }
 
 /* flexbox display */
@@ -31,7 +32,7 @@ input {
 }
 
 .box .note-content .note-title {
-  flex: 0 1 auto;
+  flex: 0 1 2rem;
 }
 
 .box .note-content .note-body {
@@ -40,9 +41,7 @@ input {
 
 /* sections */
 .note-header {
-    height: 1.5rem;
     user-select: none;  
-    background-color: orange;
     /*border: 4px dashed red;*/
 }
 
@@ -56,40 +55,58 @@ input {
     /*outline: 4px dashed blue;    */
 }
 
-
 .note-body {
     position: relative;
     margin: 0 .5rem;
     /*border: 4px dashed green;*/
-    border: 4px dashed green;
 }
 
-#txtContent {
+.note-editcontent {
     position: absolute;
     right: 0; left: 0; top: 0; bottom: 0;
-
-    font-size: 1rem;
 }
-
-#txtContent:focus {
+.note-editcontent:focus {
     outline: 0;
-    /*outline: 1px dashed lightgray;*/
 }
+
+/* elements */
 
 #btnNew {
     float: left; 
-    border: 0;   
+    border: 0;  
+    background-color: transparent; 
+}
+#btnNew::before {
+    content: '+';
+    font-size: 2rem;
+    padding: 0.4rem;
+    line-height: 1.5rem;
 }
 
 #btnClose {
     float: right;
     border: 0;
-}
-
-#btnNew, #btnClose {
     background-color: transparent;
+}
+#btnClose::before {
+    content: '\2715';
+    font-size: 1.2rem;
+    padding: 0 0.5rem;
+    line-height: 2rem;
 }
 
 #btnNew:hover, #btnClose:hover {
     background-color: darkorange;
+}
+
+body {
+    background-color: rgb(255,242,181);
+}
+
+input:focus {
+    background-color: rgb(255,250,230);
+}
+
+.note-header-focus {
+    visibility: hidden;
 }
