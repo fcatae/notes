@@ -20,6 +20,14 @@ input {
     background-color: transparent;
 }
 
+.note-header {
+    -webkit-app-region: drag; 
+}
+
+button {
+    -webkit-app-region: no-drag;
+}
+
 /* flexbox display */
 .box {
   display: flex;
@@ -73,25 +81,10 @@ input {
     outline: 0;
 }
 
-/* Organize the buttons in the header */
-.box .note-header-focus {
-  display: flex;
-  flex-flow: row;
-  width: 100%;
-}
-
-.box .note-header-focus button {
-  flex: 0 1 auto;
-}
-.box .note-header-focus .note-header-drag {
-  flex: 1 1 auto; 
-  -webkit-app-region: drag; /* .note-header-drag cannot overlap buttons */
-}
-
 /* elements */
 
 #btnNew {
-    /*float: left; */
+    float: left; 
     border: 0;  
     background-color: transparent; 
 }
@@ -103,7 +96,7 @@ input {
 }
 
 #btnClose {
-    /*float: right;*/
+    float: right;
     border: 0;
     background-color: transparent;
 }
@@ -131,7 +124,6 @@ input:focus {
     background-color: rgba(180,180,120,.9);
 }
 
-
 .show-header {
     visibility: visible;
 }
@@ -139,3 +131,4 @@ input:focus {
 .hide-header {
     visibility: hidden;
 }
+
