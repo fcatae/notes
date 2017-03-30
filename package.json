@@ -4,7 +4,7 @@
   "description": "Organize your notes",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron . --enable-logging"
   },
   "repository": "https://github.com/fcatae/organizer.git",
   "author": "GitHub",

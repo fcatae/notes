@@ -76,6 +76,25 @@ ipcMain.on('organizer.new', (event, arg) => {
 
 });
 
+ipcMain.on('task-save', (event, task_data) => {
+
+  var task = JSON.parse(task_data);
+  var filename = app.getPath('userData') + '/' + task.id;
+
+  saveFileSync(filename, task.id, task_data);
+
+  event.sender.send('task-save:reply');
+
+  console.log(`task saved: ${task.title} (id: ${task.id}) in ${filename}`);
+
+  function saveFileSync(filename, task_id, task_data) {
+      var fs = require('fs');
+      fs.writeFileSync(filename, task_data, 'utf-8');
+  }
+
+});
+
+
 
 function createWindow() {
 
@@ -131,6 +150,8 @@ function createDashboard() {
 
     });
 
+    win.toggleDevTools();
+
     win.on('closed', function () {
       win = null
     });
@@ -169,6 +190,8 @@ function createHidden() {
 }
 var fs = require('fs');
 var p = app.getPath('userData') + '/tasks.json'
+
+//fs.writeFileSync(p, saved, 'utf-8');
 
 var settings = {};
 try {
