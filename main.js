@@ -206,8 +206,10 @@ function createOpenWindow(task_id) {
     if( task_id == null )
       throw "task_id is null";
 
-    let win = new BrowserWindow({width: 240, height: 180, frame: false, show: false,
-    skipTaskbar: true})
+    let win = new BrowserWindow({width: 240, height: 180, frame: false, 
+      //skipTaskbar: true,
+      show: false
+    })
 
     var urlNotes = url.format({
           pathname: path.join(__dirname, 'notes.html'),
@@ -243,8 +245,8 @@ function createDashboard() {
     win.on('minimize', function() {
         console.log('minimize')
 
-        var allwin = BrowserWindow.getAllWindows();
-        allwin.forEach(b => b.minimize());
+        // var allwin = BrowserWindow.getAllWindows();
+        // allwin.forEach(b => b.minimize());
     });
 
     win.on('restore', function() {

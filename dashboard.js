@@ -16,16 +16,19 @@ function openTask(task_id) {
 ipcRenderer.on('dashboard.add', (event, arg) => {
    openTasks_add(JSON.parse(arg));
    dashSave(openTasks);
+   render();
 });
 
 ipcRenderer.on('dashboard.delete', (event, arg) => {
    openTasks_delete(JSON.parse(arg));
    dashSave(openTasks);
+   render();
 });
 
 ipcRenderer.on('dashboard.update', (event, arg) => {
    openTasks_update(JSON.parse(arg));
    dashSave(openTasks);
+   render();
 });
 
 var openTasks = dashOpen();
@@ -67,5 +70,3 @@ function dashSave(data) {
 
     fs.writeFileSync(p, JSON.stringify(data), 'utf-8');
 }
-
-

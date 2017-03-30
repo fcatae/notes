@@ -10,5 +10,9 @@
   "author": "GitHub",
   "devDependencies": {
     "electron": "^1.4.1"
+  },
+  "dependencies": {
+    "@types/react": "^15.0.20",
+    "@types/react-dom": "^0.14.23"
   }
 }
