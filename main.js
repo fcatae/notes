@@ -9,10 +9,10 @@ const url = require('url')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow = []
 
 function startWindow () {
-  mainWindow = createWindow();
+  mainWindow.push( createWindow() );
 }
 
 // This method will be called when Electron has finished
@@ -62,7 +62,7 @@ const {ipcMain} = require('electron')
 
 ipcMain.on('organizer.new', (event, arg) => {
 
-    let mainWindow = createWindow();
+  mainWindow.push( createWindow() );
 
 });
 
@@ -72,7 +72,7 @@ function createWindow() {
     console.log('Creating new window')  // prints "ping"
 
     let win = new BrowserWindow({width: 240, height: 180, frame: false, show: false,
-    skipTaskbar: true})
+    skipTaskbar: false})
 
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'index.html'),
