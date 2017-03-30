@@ -273,3 +273,7 @@ function guid () { // Public Domain/MIT
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
 }
+
+
+
+
