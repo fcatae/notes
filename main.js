@@ -9,12 +9,17 @@ const url = require('url')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow = []
+let windowCollection = []
+let mainWin
 
 function startWindow () {
   
-  mainWindow.push( createHidden() );
+  mainWin = createDashboard();
+  windowCollection.push( mainWin );
 
+    mainWin.on('closed', function () {
+      app.quit();
+    });
 
 }
 
@@ -29,7 +34,7 @@ app.on('ready', startWindow)
 //
 
 app.on('activate', function () {
-  if (mainWindow === null) {
+  if (windowCollection === null) {
     createDashboard()
   }
 })
@@ -67,7 +72,7 @@ const {ipcMain} = require('electron')
 
 ipcMain.on('organizer.new', (event, arg) => {
 
-  mainWindow.push( createWindow() );
+  windowCollection.push( createWindow() );
 
 });
 

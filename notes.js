@@ -23,3 +23,17 @@ function newOrganizerWindow() {
 function openTask() {
 
 }
+
+function getTitle() {
+    return document.getElementById('txtTitle').value;
+}
+
+function getContent() {
+    return document.getElementById('txtContent').innerText;
+}
+
+function saveTask() {
+    alert(getTitle())
+    alert(getContent())   
+
+}
