@@ -2,6 +2,12 @@
 
 let currentId = guid();
 
+function getTaskIdFromQueryString() {
+    let queryString = window.location.search;
+
+    return ( queryString.length > 1 ) ? queryString.substr(1) : null;
+}
+
 function getTaskId() {
     return currentId;
 }
@@ -15,34 +21,86 @@ function getContent() {
 }
 
 function getContentHtml() {
-    return document.getElementById('txtContent').innerText;
+    return document.getElementById('txtContent').innerHtml;
+}
+
+function setTaskId(value) {
+    currentId = value;
+}
+
+function setTitle(value) {
+    document.getElementById('txtTitle').value = value;
+}
+
+function setContent(value) {
+    document.getElementById('txtContent').innerText = value;
+}
+
+function setContentHtml(value) {
+    document.getElementById('txtContent').innerHtml = value;
 }
 
 // InterProcess Communication
-
-// In renderer process (web page).
 const {ipcRenderer} = require('electron')
-
-// console.log(ipcRenderer.sendSync('synchronous-message', 'ping')) // prints "pong"
-
-// ipcRenderer.on('asynchronous-reply', (event, arg) => {
-//   console.log(arg) // prints "pong"
-// })
-
-// ipcRenderer.send('asynchronous-message', 'ping')
 
 function newOrganizerWindow() {
     ipcRenderer.send('organizer.new', 'orgNEW');
 }
 
+let ipcOpenTaskCallback
+
+function ipcOpenTask(task_id) {
+    ipcRenderer.send('notes.open', task_id);
+}
+
+ipcRenderer.on('notes.open:reply', (event, task) => {
+   ipcOpenTaskCallback(task);
+})
+
 function ipcSaveTask(task) {
-    ipcRenderer.send('task-save', JSON.stringify(task));
+    ipcRenderer.send('notes.save', JSON.stringify(task));
 }
 
+// Controller
 
-function openTask() {
-
+function currentTask() {
+    return {
+        id: getTaskId(),
+        metadata: null,
+        title: getTitle(),
+        content: getContent()
+    };
 }
+
+function setCurrentTask(task) {    
+    setContent(task.content);
+    setTitle(task.title);
+    setTaskId(task.id);
+}
+
+function saveTask(task) {
+    ipcSaveTask(task);
+}
+
+function openTaskContinue(task_id, callback) {    
+    ipcOpenTaskCallback = callback;
+    ipcOpenTask(task_id);
+}
+
+function init() {
+    let task_id = getTaskIdFromQueryString();
+
+    if( task_id != null ) {
+        openTaskContinue(task_id, (task)=>{
+            setCurrentTask(task);
+        });        
+    }
+}
+
+init();
+
+
+
 
 // from: http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
 function guid () { // Public Domain/MIT
@@ -55,17 +113,4 @@ function guid () { // Public Domain/MIT
         d = Math.floor(d / 16);
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
-}
-
-function currentTask() {
-    return {
-        id: getTaskId(),
-        metadata: null,
-        title: getTitle(),
-        content: getContent()
-    };
-}
-
-function saveTask(task) {
-    ipcSaveTask(task);
 }

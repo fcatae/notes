@@ -76,7 +76,7 @@ ipcMain.on('organizer.new', (event, arg) => {
 
 });
 
-ipcMain.on('task-save', (event, task_data) => {
+ipcMain.on('notes.save', (event, task_data) => {
 
   var task = JSON.parse(task_data);
   var filename = app.getPath('userData') + '/' + task.id;
@@ -94,6 +94,85 @@ ipcMain.on('task-save', (event, task_data) => {
 
 });
 
+
+ipcMain.on('notes.openwindow', (event, task_id) => {
+
+  console.log(`task open: ${task_id}`);
+
+  taskOpenWindow(task_id);
+
+});
+
+
+
+ipcMain.on('notes.open', (event, task_id) => {
+
+  console.log(`task open: ${task_id}`);
+
+  // get data from disk
+  var filename = app.getPath('userData') + '/' + task_id;
+
+  let task_data = openFileSync(filename);
+
+  let task = JSON.parse(task_data);
+
+  if( task.id != task_id )
+    throw 'invalid task id';
+
+  console.log(`task open:reply: ${JSON.stringify(task)}`);
+
+  event.sender.send('notes.open:reply', task);
+
+  function openFileSync(filename) {
+      var fs = require('fs');
+      return fs.readFileSync(filename);
+  }
+
+});
+
+let globalWindows = {};
+
+function taskOpenWindow(task_id) {
+  if(globalWindows[task_id] == null) {
+    console.log(`taskOpenWindow: create windows for task ${task_id}`)
+
+    let win = createOpenWindow(task_id);
+    globalWindows[task_id] = win;
+
+  } else {
+    console.log(`taskOpenWindow: open windows for task ${task_id}`)
+
+    globalWindows[task_id].show();
+  }
+}
+
+function createOpenWindow(task_id) {
+
+    let win = new BrowserWindow({width: 240, height: 180, frame: false, show: false,
+    skipTaskbar: true})
+
+    var urlNotes = url.format({
+          pathname: path.join(__dirname, 'notes.html'),
+          search: task_id,
+          protocol: 'file:',
+          slashes: true
+        });
+
+    win.loadURL(urlNotes);
+
+    win.once('ready-to-show', () => {
+      win.show()
+    })
+
+    win.on('closed', function () {
+      if( globalWindows[task_id] ) {
+        globalWindows[task_id] = null;
+      }
+      win = null;
+    });
+
+    return win;
+}
 
 
 function createWindow() {
@@ -212,3 +291,17 @@ saved = JSON.stringify(setting);
 fs.writeFileSync(p, saved, 'utf-8');
 
 console.log(p);
+
+
+// from: http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+function guid () { // Public Domain/MIT
+    var d = new Date().getTime();
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+        d += performance.now(); //use high-precision timer if available
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+}

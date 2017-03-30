@@ -30,4 +30,4 @@
 - task_id
 - metadata: last position (rect bound)
 - title
-- body
+- content
