@@ -18,7 +18,9 @@ var App = (function (_super) {
         var domTasks = [];
         for (var id in taskCollection) {
             var task = taskCollection[id];
-            domTasks.push(React.createElement(TaskItem, { key: id, id: id, title: task.title }));
+            domTasks.push(React.createElement("p", { key: id },
+                React.createElement(TaskItem, { id: id, title: task.title }),
+                React.createElement(DeleteButton, { id: id })));
         }
         return React.createElement("div", null, domTasks);
     };
@@ -36,10 +38,24 @@ var TaskItem = (function (_super) {
     TaskItem.prototype.render = function () {
         var id = this.props.id;
         var title = this.props.title;
-        return React.createElement("p", null,
-            React.createElement("button", { onClick: this.click.bind(this) }, title));
+        return React.createElement("button", { onClick: this.click.bind(this) }, title);
     };
     return TaskItem;
+}(React.Component));
+var DeleteButton = (function (_super) {
+    __extends(DeleteButton, _super);
+    function DeleteButton() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeleteButton.prototype.click = function () {
+        var id = this.props.id;
+        removeTask(id);
+    };
+    DeleteButton.prototype.render = function () {
+        var id = this.props.id;
+        return React.createElement("span", { onClick: this.click.bind(this) }, "\u2713");
+    };
+    return DeleteButton;
 }(React.Component));
 function render() {
     ReactDOM.render(React.createElement(App, { tasks: openTasks }), document.getElementById('app'));

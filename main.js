@@ -101,6 +101,27 @@ ipcMain.on('notes.save', (event, task_data) => {
 
 });
 
+ipcMain.on('notes.remove', (event, task_id) => {
+
+  var filename = app.getPath('userData') + '/' + task_id;
+
+  deleteFileSync(filename);
+
+  notify_delete_task(task_id);
+
+  console.log(`task deleted: ${task_id}`);
+
+  function deleteFileSync(filename) {
+    try {
+      var fs = require('fs');
+      fs.unlinkSync(filename);      
+    }
+    catch(err) {}
+  }
+
+});
+
+
 ipcMain.on('notes.open', (event, task_id) => {
 
   let newTaskId = convertTemporaryTaskId(task_id);
@@ -234,7 +255,7 @@ function createDashboard() {
     let win = new BrowserWindow({width: 300, height: 640,     
       show: false, icon: 'icon.png' });
 
-    win.setMenu(null);
+ //   win.setMenu(null);
 
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dashboard.html'),
@@ -292,6 +313,6 @@ function notify_update_task(task) {
   dashboardWindows.webContents.send('dashboard.update', JSON.stringify(task));
 }
 
-function notify_delete_task() {
-  dashboardWindows.webContents.send('dashboard.delete', JSON.stringify(task));
+function notify_delete_task(task_id) {
+  dashboardWindows.webContents.send('dashboard.delete', task_id);
 }

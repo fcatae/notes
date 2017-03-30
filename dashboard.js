@@ -13,14 +13,23 @@ function openTask(task_id) {
     ipcRenderer.send('notes.openwindow', task_id);
 }
 
+function removeTask(task_id) {
+
+    // ask user first
+    if( confirm('Are you sure you want to delete the task?') ) {
+        ipcRenderer.send('notes.remove', task_id);
+    }
+
+}
+
 ipcRenderer.on('dashboard.add', (event, arg) => {
    openTasks_add(JSON.parse(arg));
    // dashSave(openTasks);
    render();
 });
 
-ipcRenderer.on('dashboard.delete', (event, arg) => {
-   openTasks_delete(JSON.parse(arg));
+ipcRenderer.on('dashboard.delete', (event, task_id) => {
+   openTasks_delete(task_id);
    dashSave(openTasks);
    render();
 });
@@ -37,8 +46,8 @@ function openTasks_add(task) {
     openTasks[task.id] = { id: task.id, title: task.title };
 }
 
-function openTasks_delete(task) {
-    delete openTasks[task.id];
+function openTasks_delete(task_id) {
+    delete openTasks[task_id];
 }
 
 function openTasks_update(task) {

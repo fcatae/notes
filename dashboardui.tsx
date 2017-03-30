@@ -13,6 +13,10 @@ interface AppProps {
     tasks: ITaskCollection;
 }
 
+interface IDeleteTaskProps {
+    id: string;
+}
+
 class App extends React.Component<AppProps,{}> {
    render() {
        var taskCollection = this.props.tasks;
@@ -21,7 +25,10 @@ class App extends React.Component<AppProps,{}> {
 
        for(let id in taskCollection) {
            let task = taskCollection[id];
-           domTasks.push( <TaskItem key={id} id={id} title={task.title} /> );
+           domTasks.push( <p key={id}>
+               <TaskItem id={id} title={task.title} />
+               <DeleteButton id={id} />
+               </p>);
        }
        
        return <div>{domTasks}</div>;
@@ -38,9 +45,23 @@ class TaskItem extends React.Component<ITask,{}> {
        let id = this.props.id;
        let title = this.props.title;
               
-       return <p><button onClick={this.click.bind(this)}>{title}</button></p>;
+       return <button onClick={this.click.bind(this)}>{title}</button>;
    }
 }
+
+class DeleteButton extends React.Component<IDeleteTaskProps,{}> {
+    click() {
+        let id = this.props.id;
+        removeTask(id);
+    }
+
+   render() {
+       let id = this.props.id;
+              
+       return <span onClick={this.click.bind(this)}>&#x2713;</span>;
+   }
+}
+
 
 function render() {
     ReactDOM.render(<App tasks={openTasks} />, document.getElementById('app'));
