@@ -70,3 +70,5 @@ function dashSave(data) {
 
     fs.writeFileSync(p, JSON.stringify(data), 'utf-8');
 }
+
+render();
