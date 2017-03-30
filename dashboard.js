@@ -1,4 +1,9 @@
+function create() {
+    openTask();
+}
+
 const {ipcRenderer} = require('electron')
+
 
 function newOrganizerWindow() {
     ipcRenderer.send('notes.new', 'orgNEW');

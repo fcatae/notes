@@ -13,7 +13,7 @@ let mainWindow = []
 
 function startWindow () {
   
-  mainWindow.push( createDashboard() );
+  mainWindow.push( createHidden() );
 
 
 }
@@ -111,6 +111,21 @@ function createDashboard() {
       win.show()
     })
 
+    win.on('minimize', function() {
+        console.log('minimize')
+
+        var allwin = BrowserWindow.getAllWindows();
+        allwin.forEach(b => b.minimize());
+    });
+
+    win.on('restore', function() {
+        console.log('restore')
+
+        var allwin = BrowserWindow.getAllWindows();
+        allwin.forEach(b => b.restore());
+
+    });
+
     win.on('closed', function () {
       win = null
     });
@@ -118,6 +133,35 @@ function createDashboard() {
     return win;
 }
 
+
+function createHidden() {
+
+    let win = new BrowserWindow({transparent: true, frame: false})
+    win.setIgnoreMouseEvents(true)
+
+    win.on('minimize', function() {
+        console.log('minimize')
+
+        var allwin = BrowserWindow.getAllWindows();
+        allwin.forEach(b => b.minimize());
+    });
+
+    win.on('restore', function() {
+        console.log('restore')
+
+        var allwin = BrowserWindow.getAllWindows();
+        allwin.forEach(b => b.restore());
+
+    });
+
+    win.on('closed', function () {
+      win = null
+    });
+
+    var win2 = createWindow();
+    
+    return win;
+}
 var fs = require('fs');
 var p = app.getPath('userData') + '/tasks.json'
 
