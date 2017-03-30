@@ -80,7 +80,7 @@ function createWindow() {
     skipTaskbar: true})
 
     win.loadURL(url.format({
-      pathname: path.join(__dirname, 'index.html'),
+      pathname: path.join(__dirname, 'notes.html'),
       protocol: 'file:',
       slashes: true
     }));
