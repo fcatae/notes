@@ -12,3 +12,14 @@ const {ipcRenderer} = require('electron')
 function newOrganizerWindow() {
     ipcRenderer.send('organizer.new', 'orgNEW');
 }
+
+
+// ipcRenderer.send('asynchronous-message', 'ping')
+
+// ipcRenderer.on('asynchronous-reply', (event, arg) => {
+//   console.log(arg) // prints "pong"
+// })
+
+function openTask() {
+
+}

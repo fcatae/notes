@@ -117,3 +117,26 @@ function createDashboard() {
 
     return win;
 }
+
+var fs = require('fs');
+var p = app.getPath('userData') + '/tasks.json'
+
+var settings = {};
+try {
+  fs.openSync(p, 'r+'); 
+  var d = fs.readFileSync(p);
+  settings = JSON.parse(d);
+}
+catch(err) {
+  console.log('file does not exist ... creating a new file')
+}
+
+console.log(JSON.stringify(settings))
+
+setting = {a:1, b:2, c:"a"};
+
+saved = JSON.stringify(setting);
+
+fs.writeFileSync(p, saved, 'utf-8');
+
+console.log(p);
