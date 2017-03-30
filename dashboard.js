@@ -17,29 +17,29 @@ ipcRenderer.on('dashboard.add', (event, task) => {
    openTasks_add(task);
 });
 
-ipcRenderer.on('dashboard.remove', (event, task) => {
-   openTasks_remove(task);
+ipcRenderer.on('dashboard.delete', (event, task) => {
+   openTasks_delete(task);
 });
 
 ipcRenderer.on('dashboard.update', (event, task) => {
    openTasks_update(task);
 });
 
-var openTasks = dashOpen() || {};
+var openTasks = dashOpen();
 
 function openTasks_add(task) {
     openTasks[task.id] = { id: task.id, title: task.title };
-    alert(JSON.stringify(openTasks))
+    alert(JSON.stringify(task))
 }
 
-function openTasks_remove(task) {
+function openTasks_delete(task) {
     delete openTasks[task.id];
-    alert(JSON.stringify(openTasks))
+    alert(JSON.stringify(task))
 }
 
 function openTasks_update(task) {
     openTasks[task.id] = { id: task.id, title: task.title };
-    alert(JSON.stringify(openTasks))
+    alert(JSON.stringify(task))
 }
 
 function dashOpen() {
@@ -56,6 +56,8 @@ function dashOpen() {
     catch(err) {
     console.log('file does not exist... ')
     }
+
+return {};
 }
 
 function dashSave(data) {

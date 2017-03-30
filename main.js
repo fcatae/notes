@@ -88,6 +88,8 @@ ipcMain.on('notes.save', (event, task_data) => {
 
   saveFileSync(filename, task.id, task_data);
 
+  notify_update_task(task);
+
   event.sender.send('task-save:reply');
 
   console.log(`task saved: ${task.title} (id: ${task.id}) in ${filename}`);
@@ -113,6 +115,8 @@ ipcMain.on('notes.open', (event, task_id) => {
         title: '',
         content: ''
       };
+
+      notify_create_task(task);
       
   } else {
     console.log(`task open: ${task_id}`);
@@ -276,4 +280,16 @@ function guid () { // Public Domain/MIT
 
 
 
+function notify_create_task(task) {
+  console.log( JSON.stringify(task))
+  dashboardWindows.webContents.send('dashboard.add', JSON.stringify(task));
+}
 
+function notify_update_task(task) {
+  console.log( JSON.stringify(task))
+  dashboardWindows.webContents.send('dashboard.update', JSON.stringify(task));
+}
+
+function notify_delete_task() {
+  dashboardWindows.webContents.send('dashboard.delete', JSON.stringify(task));
+}
