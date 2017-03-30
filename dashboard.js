@@ -10,6 +10,7 @@ function openTask() {
 
 
 var fs = require('fs');
+var app = require('electron').remote.app;
 var p = app.getPath('userData') + '/dash.json'
 
 var settings = {};
