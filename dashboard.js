@@ -7,12 +7,10 @@ const {ipcRenderer} = require('electron')
 
 function newOrganizerWindow() {
     let task_id = guid();
-    ipcRenderer.send('notes.new', task_id);
     ipcRenderer.send('notes.newwindow', task_id);
 }
 
 function openTask(task_id) {
-    //ipcRenderer.send('organizer.new', 'orgNEW');
     ipcRenderer.send('notes.openwindow', task_id);
 }
 
@@ -30,16 +28,6 @@ try {
 catch(err) {
   console.log('file does not exist ... creating a new file')
 }
-
-console.log(JSON.stringify(settings))
-
-setting = {dash:1, dashb:2, dashc:"a"};
-
-saved = JSON.stringify(setting);
-
-fs.writeFileSync(p, saved, 'utf-8');
-
-console.log(p);
 
 
 

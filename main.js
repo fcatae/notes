@@ -95,6 +95,12 @@ ipcMain.on('notes.save', (event, task_data) => {
 });
 
 
+ipcMain.on('notes.newwindow', (event, arg) => {
+
+  taskOpenWindow(null);
+
+});
+
 ipcMain.on('notes.openwindow', (event, task_id) => {
 
   console.log(`task open: ${task_id}`);
@@ -132,11 +138,20 @@ ipcMain.on('notes.open', (event, task_id) => {
 
 let globalWindows = {};
 
+function taskNewWindow() { 
+}
+
 function taskOpenWindow(task_id) {
+
   if(globalWindows[task_id] == null) {
     console.log(`taskOpenWindow: create windows for task ${task_id}`)
 
     let win = createOpenWindow(task_id);
+
+    win.on('closed', function () {
+      globalWindows[task_id] && (globalWindows[task_id] = null);
+    });
+
     globalWindows[task_id] = win;
 
   } else {
@@ -164,18 +179,13 @@ function createOpenWindow(task_id) {
       win.show()
     })
 
-    win.on('closed', function () {
-      if( globalWindows[task_id] ) {
-        globalWindows[task_id] = null;
-      }
-      win = null;
-    });
-
     return win;
 }
 
 
 function createWindow() {
+
+  alert('should NOT use [main.js:createWindow]')
 
     console.log('Creating new window')  // prints "ping"
 
@@ -267,30 +277,6 @@ function createHidden() {
     
     return win;
 }
-var fs = require('fs');
-var p = app.getPath('userData') + '/tasks.json'
-
-//fs.writeFileSync(p, saved, 'utf-8');
-
-var settings = {};
-try {
-  fs.openSync(p, 'r+'); 
-  var d = fs.readFileSync(p);
-  settings = JSON.parse(d);
-}
-catch(err) {
-  console.log('file does not exist ... creating a new file')
-}
-
-console.log(JSON.stringify(settings))
-
-setting = {a:1, b:2, c:"a"};
-
-saved = JSON.stringify(setting);
-
-fs.writeFileSync(p, saved, 'utf-8');
-
-console.log(p);
 
 
 // from: http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript

@@ -1,6 +1,6 @@
 // DOM related
 
-let currentId = guid();
+let currentId;
 
 function getTaskIdFromQueryString() {
     let queryString = window.location.search;
@@ -26,6 +26,7 @@ function getContentHtml() {
 
 function setTaskId(value) {
     currentId = value;
+    document.getElementById('txtTaskId').value = value;    
 }
 
 function setTitle(value) {
@@ -43,14 +44,14 @@ function setContentHtml(value) {
 // InterProcess Communication
 const {ipcRenderer} = require('electron')
 
-function newOrganizerWindow() {
-    ipcRenderer.send('organizer.new', 'orgNEW');
-}
-
 let ipcOpenTaskCallback
 
 function ipcOpenTask(task_id) {
     ipcRenderer.send('notes.open', task_id);
+}
+
+function ipcNewTask() {
+    ipcRenderer.send('notes.newwindow', null);
 }
 
 ipcRenderer.on('notes.open:reply', (event, task) => {
@@ -78,6 +79,11 @@ function setCurrentTask(task) {
     setTaskId(task.id);
 }
 
+function newTask(task) {
+    alert('newTask')
+    ipcNewTask(task);
+}
+
 function saveTask(task) {
     ipcSaveTask(task);
 }
@@ -91,9 +97,17 @@ function init() {
     let task_id = getTaskIdFromQueryString();
 
     if( task_id != null ) {
+        // open task
         openTaskContinue(task_id, (task)=>{
             setCurrentTask(task);
         });        
+    } else { 
+        // create a new task
+        setCurrentTask({
+            id: guid(),
+            title: '',
+            content: ''
+        });
     }
 }
 

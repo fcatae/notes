@@ -12,7 +12,7 @@
 
         <div class="row note-header note-header-background">
           <div class="note-header-focus">
-              <button id="btnNew" onclick="newOrganizerWindow()"></button>
+              <button id="btnNew" onclick="newTask()"></button>
               <button id="btnClose"  onclick="saveTask(currentTask()); window.close()"></button>
           </div>
         </div>
@@ -27,6 +27,8 @@
             </div>
         </div>
     </div>
+
+    <input id="txtTaskId" type="hidden" value="">
 
     <script src="notes.js"></script>
 
