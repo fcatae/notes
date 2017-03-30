@@ -10,20 +10,18 @@ const url = require('url')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let windowCollection = []
-let mainWin
+let dashboardWindows
 
-function startWindow () {
+app.on('ready', function startWindow () {
   
-  mainWin = createDashboard();
-  windowCollection.push( mainWin );
+  dashboardWindows = createDashboard();
 
-    mainWin.on('closed', function () {
-      app.quit();
-    });
+  dashboardWindows.on('closed', function () {
+    app.quit();
+  });
 
-}
+});
 
-app.on('ready', startWindow)
 
 //
 // On OS X it's common to re-create a window in the app when the
@@ -66,15 +64,22 @@ app.on('window-all-closed', function () {
 //   tray.setContextMenu(contextMenu)
 // })
 
+function createTemporaryTaskId() {
+  return "new_" + guid();
+}
 
-// In main process.
+function convertTemporaryTaskId(temp_task_id) {
+  return (temp_task_id.startsWith('new_')) ? temp_task_id.substr(4) : null;
+}
+
+function getTaskId(temp_task_id) {
+  return (temp_task_id.startsWith('new_')) ? temp_task_id.substr(4) : temp_task_id;
+}
+//
+
+
 const {ipcMain} = require('electron')
 
-ipcMain.on('organizer.new', (event, arg) => {
-
-  windowCollection.push( createWindow() );
-
-});
 
 ipcMain.on('notes.save', (event, task_data) => {
 
@@ -94,10 +99,55 @@ ipcMain.on('notes.save', (event, task_data) => {
 
 });
 
+ipcMain.on('notes.open', (event, task_id) => {
+
+  let newTaskId = convertTemporaryTaskId(task_id);
+  let task;
+
+  if( newTaskId != null ) {
+
+      console.log(`task open (new): ${task_id}`);
+
+      task = {
+        id: newTaskId,
+        title: '',
+        content: ''
+      };
+      
+  } else {
+    console.log(`task open: ${task_id}`);
+
+    // get data from disk
+    var filename = app.getPath('userData') + '/' + task_id;
+
+    let task_data = openFileSync(filename);
+
+    task = JSON.parse(task_data);
+
+    if( task.id != task_id )
+      throw 'invalid task id';
+  }
+
+    console.log(`task open:reply: ${JSON.stringify(task)}`);
+
+    event.sender.send('notes.open:reply', task);
+
+    function openFileSync(filename) {
+        var fs = require('fs');
+        return fs.readFileSync(filename);
+    }
+
+
+});
+
 
 ipcMain.on('notes.newwindow', (event, arg) => {
 
-  taskOpenWindow(null);
+  var task_id = createTemporaryTaskId();
+
+  console.log(`task create: ${task_id}`);
+
+  taskOpenWindow(task_id);
 
 });
 
@@ -111,32 +161,18 @@ ipcMain.on('notes.openwindow', (event, task_id) => {
 
 
 
-ipcMain.on('notes.open', (event, task_id) => {
-
-  console.log(`task open: ${task_id}`);
-
-  // get data from disk
-  var filename = app.getPath('userData') + '/' + task_id;
-
-  let task_data = openFileSync(filename);
-
-  let task = JSON.parse(task_data);
-
-  if( task.id != task_id )
-    throw 'invalid task id';
-
-  console.log(`task open:reply: ${JSON.stringify(task)}`);
-
-  event.sender.send('notes.open:reply', task);
-
-  function openFileSync(filename) {
-      var fs = require('fs');
-      return fs.readFileSync(filename);
-  }
-
-});
-
 let globalWindows = {};
+
+function globalWindows_get(id) {
+  let task_id = getTaskId(id);
+  return (globalWindows[task_id]) ? globalWindows[task_id] : null;
+}
+
+function globalWindows_set(id, value) {
+  let task_id = getTaskId(id);
+  globalWindows[task_id] && (globalWindows[task_id] = value);
+}
+
 
 function taskNewWindow() { 
 }
@@ -149,19 +185,22 @@ function taskOpenWindow(task_id) {
     let win = createOpenWindow(task_id);
 
     win.on('closed', function () {
-      globalWindows[task_id] && (globalWindows[task_id] = null);
+      globalWindows_set(task_id, null);
     });
 
-    globalWindows[task_id] = win;
+    globalWindows_set(task_id, win);
 
   } else {
     console.log(`taskOpenWindow: open windows for task ${task_id}`)
 
-    globalWindows[task_id].show();
+    globalWindows_get(task_id).show();
   }
 }
 
 function createOpenWindow(task_id) {
+
+    if( task_id == null )
+      throw "task_id is null";
 
     let win = new BrowserWindow({width: 240, height: 180, frame: false, show: false,
     skipTaskbar: true})
@@ -178,33 +217,6 @@ function createOpenWindow(task_id) {
     win.once('ready-to-show', () => {
       win.show()
     })
-
-    return win;
-}
-
-
-function createWindow() {
-
-  alert('should NOT use [main.js:createWindow]')
-
-    console.log('Creating new window')  // prints "ping"
-
-    let win = new BrowserWindow({width: 240, height: 180, frame: false, show: false,
-    skipTaskbar: true})
-
-    win.loadURL(url.format({
-      pathname: path.join(__dirname, 'notes.html'),
-      protocol: 'file:',
-      slashes: true
-    }));
-
-    win.once('ready-to-show', () => {
-      win.show()
-    })
-
-    win.on('closed', function () {
-      win = null
-    });
 
     return win;
 }
@@ -245,36 +257,6 @@ function createDashboard() {
       win = null
     });
 
-    return win;
-}
-
-
-function createHidden() {
-
-    let win = new BrowserWindow({transparent: true, frame: false})
-    win.setIgnoreMouseEvents(true)
-
-    win.on('minimize', function() {
-        console.log('minimize')
-
-        var allwin = BrowserWindow.getAllWindows();
-        allwin.forEach(b => b.minimize());
-    });
-
-    win.on('restore', function() {
-        console.log('restore')
-
-        var allwin = BrowserWindow.getAllWindows();
-        allwin.forEach(b => b.restore());
-
-    });
-
-    win.on('closed', function () {
-      win = null
-    });
-
-    var win2 = createWindow();
-    
     return win;
 }
 
