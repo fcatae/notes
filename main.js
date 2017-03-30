@@ -174,7 +174,8 @@ function globalWindows_get(id) {
 
 function globalWindows_set(id, value) {
   let task_id = getTaskId(id);
-  globalWindows[task_id] && (globalWindows[task_id] = value);
+  console.log('GLOBAL: ' + task_id);
+  globalWindows[task_id] = value;
 }
 
 
@@ -208,7 +209,7 @@ function createOpenWindow(task_id) {
 
     let win = new BrowserWindow({width: 240, height: 180, frame: false, 
       //skipTaskbar: true,
-      show: false
+      show: false, icon: 'icon.png'
     })
 
     var urlNotes = url.format({
@@ -230,7 +231,10 @@ function createOpenWindow(task_id) {
 
 function createDashboard() {
 
-    let win = new BrowserWindow({width: 300, height: 640, show: false});
+    let win = new BrowserWindow({width: 300, height: 640,     
+      show: false, icon: 'icon.png' });
+
+    win.setMenu(null);
 
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dashboard.html'),
@@ -258,7 +262,7 @@ function createDashboard() {
     });
 
     // win.toggleDevTools();
-    
+
     return win;
 }
 

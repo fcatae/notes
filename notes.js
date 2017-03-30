@@ -41,7 +41,16 @@ function setContentHtml(value) {
     document.getElementById('txtContent').innerHtml = value;
 }
 
+window.addEventListener('focus', function() {
+    var txtTitle = document.getElementById('txtTitle');
+
+    if(txtTitle) {
+        window.document.title = txtTitle.value;
+    }
+});
 window.addEventListener('blur', function() {
+    window.document.title = txtTitle.value;
+
     scheduleSaveTask();
     console.log('task saved');
 });
