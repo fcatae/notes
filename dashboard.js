@@ -13,39 +13,39 @@ function openTask(task_id) {
     ipcRenderer.send('notes.openwindow', task_id);
 }
 
-ipcRenderer.on('dashboard.add', (event, task) => {
-   openTasks_add(task);
+ipcRenderer.on('dashboard.add', (event, arg) => {
+   openTasks_add(JSON.parse(arg));
+   dashSave(openTasks);
 });
 
-ipcRenderer.on('dashboard.delete', (event, task) => {
-   openTasks_delete(task);
+ipcRenderer.on('dashboard.delete', (event, arg) => {
+   openTasks_delete(JSON.parse(arg));
+   dashSave(openTasks);
 });
 
-ipcRenderer.on('dashboard.update', (event, task) => {
-   openTasks_update(task);
+ipcRenderer.on('dashboard.update', (event, arg) => {
+   openTasks_update(JSON.parse(arg));
+   dashSave(openTasks);
 });
 
 var openTasks = dashOpen();
 
 function openTasks_add(task) {
     openTasks[task.id] = { id: task.id, title: task.title };
-    alert(JSON.stringify(task))
 }
 
 function openTasks_delete(task) {
     delete openTasks[task.id];
-    alert(JSON.stringify(task))
 }
 
 function openTasks_update(task) {
     openTasks[task.id] = { id: task.id, title: task.title };
-    alert(JSON.stringify(task))
 }
 
 function dashOpen() {
     var fs = require('fs');
     var app = require('electron').remote.app;
-    var p = app.getPath('userData') + '/dash.json'
+    var p = app.getPath('userData') + '/dashboard.json'
 
     var settings = {};
     try {
@@ -63,7 +63,7 @@ return {};
 function dashSave(data) {
     var fs = require('fs');
     var app = require('electron').remote.app;
-    var p = app.getPath('userData') + '/dash.json'
+    var p = app.getPath('userData') + '/dashboard.json'
 
     fs.writeFileSync(p, JSON.stringify(data), 'utf-8');
 }
