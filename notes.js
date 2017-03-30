@@ -41,6 +41,11 @@ function setContentHtml(value) {
     document.getElementById('txtContent').innerHtml = value;
 }
 
+window.addEventListener('blur', function() {
+    scheduleSaveTask();
+    console.log('task saved');
+});
+
 // InterProcess Communication
 const {ipcRenderer} = require('electron')
 
@@ -64,6 +69,10 @@ function ipcSaveTask(task) {
 
 // Controller
 
+function scheduleSaveTask() {
+    saveTask(currentTask());
+}
+
 function currentTask() {
     return {
         id: getTaskId(),
@@ -80,7 +89,6 @@ function setCurrentTask(task) {
 }
 
 function newTask(task) {
-    alert('newTask')
     ipcNewTask(task);
 }
 

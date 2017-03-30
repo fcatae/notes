@@ -230,7 +230,7 @@ function createOpenWindow(task_id) {
 
 function createDashboard() {
 
-    let win = new BrowserWindow({show: false});
+    let win = new BrowserWindow({width: 300, height: 640, show: false});
 
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dashboard.html'),
@@ -252,17 +252,13 @@ function createDashboard() {
     win.on('restore', function() {
         console.log('restore')
 
-        var allwin = BrowserWindow.getAllWindows();
-        allwin.forEach(b => b.restore());
+        // var allwin = BrowserWindow.getAllWindows();
+        // allwin.forEach(b => b.restore());
 
     });
 
-    win.toggleDevTools();
-
-    win.on('closed', function () {
-      win = null
-    });
-
+    // win.toggleDevTools();
+    
     return win;
 }
 

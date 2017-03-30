@@ -43,7 +43,7 @@ button {
 }
 
 .box .note-content .note-title {
-  flex: 0 1 2rem;
+  flex: 0 1 auto;
 }
 
 .box .note-content .note-body {
@@ -64,6 +64,7 @@ button {
     position: relative;
     user-select: none;
     margin: 4px;
+    height: 1rem;
     /*outline: 4px dashed blue;    */
 }
 

@@ -15,7 +15,7 @@ function openTask(task_id) {
 
 ipcRenderer.on('dashboard.add', (event, arg) => {
    openTasks_add(JSON.parse(arg));
-   dashSave(openTasks);
+   // dashSave(openTasks);
    render();
 });
 
