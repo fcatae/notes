@@ -1,6 +1,7 @@
 // DOM related
 
 let currentId;
+let alwaysOnTop = false;
 
 function getTaskIdFromQueryString() {
     let queryString = window.location.search;
@@ -41,6 +42,15 @@ function setContentHtml(value) {
     document.getElementById('txtContent').innerHtml = value;
 }
 
+function toggleAlwaysOnTop(classname, value) {
+    if(value) {
+        document.getElementById('btnPin').classList.add(classname);
+    } else {
+        document.getElementById('btnPin').classList.remove(classname);
+    }   
+    
+}
+
 window.addEventListener('focus', function() {
     var txtTitle = document.getElementById('txtTitle');
 
@@ -76,6 +86,10 @@ function ipcSaveTask(task) {
     ipcRenderer.send('notes.save', JSON.stringify(task));
 }
 
+function ipcAlwaysOnTop(value) {
+    ipcRenderer.send('notes.metadata.top', value);
+}
+
 // Controller
 
 function scheduleSaveTask() {
@@ -108,6 +122,13 @@ function saveTask(task) {
 function openTaskContinue(task_id, callback) {    
     ipcOpenTaskCallback = callback;
     ipcOpenTask(task_id);
+}
+
+function setAlwaysOnTop() {
+    alwaysOnTop = !alwaysOnTop;
+
+    ipcAlwaysOnTop(alwaysOnTop);
+    toggleAlwaysOnTop('pinned', alwaysOnTop);
 }
 
 function init() {

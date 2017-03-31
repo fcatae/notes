@@ -193,6 +193,16 @@ ipcMain.on('notes.removewindow', (event, task_id) => {
 
 });
 
+ipcMain.on('notes.metadata.top', (event, shouldAlwaysBeOnTop) => {
+  let win = BrowserWindow.fromWebContents(event.sender);
+ 
+  console.log(`notes.metadata.top: (win_id:${win.id}) = ${shouldAlwaysBeOnTop}`);
+
+  if(win) {      
+      win.setAlwaysOnTop(shouldAlwaysBeOnTop);
+  }
+
+});
 
 
 let globalWindows = {};
@@ -204,7 +214,6 @@ function globalWindows_get(id) {
 
 function globalWindows_set(id, value) {
   let task_id = getTaskId(id);
-  console.log('GLOBAL: ' + task_id);
   globalWindows[task_id] = value;
 }
 
@@ -313,12 +322,10 @@ function guid () { // Public Domain/MIT
 
 
 function notify_create_task(task) {
-  console.log( JSON.stringify(task))
   dashboardWindows.webContents.send('dashboard.add', JSON.stringify(task));
 }
 
 function notify_update_task(task) {
-  console.log( JSON.stringify(task))
   dashboardWindows.webContents.send('dashboard.update', JSON.stringify(task));
 }
 

@@ -96,6 +96,21 @@ button {
     line-height: 1.5rem;
 }
 
+#btnPin {
+    float: left;
+    border: 0;
+    background-color: transparent;
+}
+#btnPin::before {
+    content: '\1F4CC';
+    font-size: 1rem;
+    padding: 0 0.5rem;
+    line-height: 2rem;
+}
+#btnPin.pinned::before {
+    content: '\1F4CD';
+}
+
 #btnClose {
     float: right;
     border: 0;
@@ -109,7 +124,7 @@ button {
 }
 
 /* Colors */
-#btnNew:hover, #btnClose:hover {
+#btnNew:hover, #btnPin:hover, #btnClose:hover {
     background-color: darkorange;
 }
 
