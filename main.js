@@ -261,7 +261,7 @@ function createOpenWindow(task_id) {
 
 function createDashboard() {
 
-    let win = new BrowserWindow({width: 300, height: 640,     
+    let win = new BrowserWindow({width: 300, height: 400,     
       show: false, icon: 'icon.png' });
 
  //   win.setMenu(null);
@@ -324,4 +324,8 @@ function notify_update_task(task) {
 
 function notify_delete_task(task_id) {
   dashboardWindows.webContents.send('dashboard.delete', task_id);
+}
+
+function isRunningProduction() {
+  return process.argv0.toLowerCase().endsWith('electron.exe');
 }

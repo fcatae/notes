@@ -43,7 +43,8 @@ class TaskItem extends React.Component<ITask,{}> {
 
    render() {
        let id = this.props.id;
-       let title = this.props.title;
+       let original_title = this.props.title;
+       let title = (original_title != '') ? original_title : '[Empty Title]';
               
        return <button onClick={this.click.bind(this)}>{title}</button>;
    }

@@ -4,12 +4,16 @@
   "description": "Organize your notes",
   "main": "main.js",
   "scripts": {
-    "start": "electron . --enable-logging"
+    "start": "electron . --enable-logging",
+    "icon": "png-to-ico app.png > app.ico",
+    "packager": "electron-packager . --out out --overwrite --icon=./app.ico"
   },
   "repository": "https://github.com/fcatae/organizer.git",
   "author": "GitHub",
   "devDependencies": {
-    "electron": "^1.4.1"
+    "electron": "^1.4.1",
+    "electron-packager": "^8.6.0",
+    "png-to-ico": "^1.0.2"
   },
   "dependencies": {
     "@types/react": "^15.0.20",
