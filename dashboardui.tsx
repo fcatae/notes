@@ -26,8 +26,8 @@ class App extends React.Component<AppProps,{}> {
        for(let id in taskCollection) {
            let task = taskCollection[id];
            domTasks.push( <p key={id}>
-               <TaskItem id={id} title={task.title} />
                <DeleteButton id={id} />
+               <TaskItem id={id} title={task.title} />               
                </p>);
        }
        
@@ -50,15 +50,17 @@ class TaskItem extends React.Component<ITask,{}> {
 }
 
 class DeleteButton extends React.Component<IDeleteTaskProps,{}> {
-    click() {
+    click(ev) {
+        ev.preventDefault();
         let id = this.props.id;
         removeTask(id);
     }
 
    render() {
        let id = this.props.id;
-              
-       return <span onClick={this.click.bind(this)}>&#x2713;</span>;
+
+        return <input type="checkbox" onClick={this.click.bind(this)}/>     
+       //return <span onClick={this.click.bind(this)}>&#x2713;</span>;
    }
 }
 

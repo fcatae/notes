@@ -184,6 +184,15 @@ ipcMain.on('notes.openwindow', (event, task_id) => {
 
 });
 
+ipcMain.on('notes.removewindow', (event, task_id) => {
+  let win = globalWindows_get(task_id);
+ 
+  if(win) {
+      win.close();
+  }
+
+});
+
 
 
 let globalWindows = {};
@@ -205,7 +214,7 @@ function taskNewWindow() {
 
 function taskOpenWindow(task_id) {
 
-  if(globalWindows[task_id] == null) {
+  if(globalWindows_get(task_id) == null) {
     console.log(`taskOpenWindow: create windows for task ${task_id}`)
 
     let win = createOpenWindow(task_id);
@@ -231,8 +240,8 @@ function createOpenWindow(task_id) {
     let win = new BrowserWindow({width: 240, height: 180, frame: false, 
       //skipTaskbar: true,
       show: false, icon: 'icon.png'
-    })
-
+    });
+    
     var urlNotes = url.format({
           pathname: path.join(__dirname, 'notes.html'),
           search: task_id,

@@ -1,3 +1,14 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 button {
     width: 90%;
+}
+
+button.button-create {
+    display: block;
+    width: 6rem;
+    height: 1.5rem;
+    margin: 0  auto;
 }

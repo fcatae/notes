@@ -17,6 +17,7 @@ function removeTask(task_id) {
 
     // ask user first
     if( confirm('Are you sure you want to delete the task?') ) {
+        ipcRenderer.send('notes.removewindow', task_id);
         ipcRenderer.send('notes.remove', task_id);
     }
 
