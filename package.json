@@ -11,7 +11,7 @@
   "repository": "https://github.com/fcatae/organizer.git",
   "author": "GitHub",
   "devDependencies": {
-    "electron": "^1.4.1",
+    "electron": "^9.1.0",
     "electron-packager": "^8.6.0",
     "png-to-ico": "^1.0.2"
   },
